@@ -1,73 +1,102 @@
-scenario Main {
+<aiml version="1.0.1" encoding="UTF-8">
 
-    # =========================
-    # GLOBAL FALLBACK
-    # =========================
-    state: /NoMatch {
-        q: * -> {
-            a: "Я могу помочь с погодой и курсом валют. Напишите: погода или курс валют. Также можно /hello."
-        }
-    }
+  <!-- ===================== -->
+  <!-- /hello -->
+  <!-- ===================== -->
+  <category>
+    <pattern>/HELLO</pattern>
+    <template>Привет! Я бот-помощник. Могу подсказать погоду и курс валют. Напишите: погода или курс валют.</template>
+  </category>
 
-    # =========================
-    # HELLO
-    # =========================
-    state: /hello {
-        q: /hello -> { a: "Привет! Я бот-помощник. Могу подсказать погоду и курс валют. Напишите: погода или курс валют." }
-        q: "(?i)^(привет|здравствуй|здравствуйте|добрый\\s*(день|вечер|утро)|хай|hello|hi)\\b.*" -> {
-            a: "Привет! Могу рассказать про погоду и курс валют. Что интересует?"
-        }
-    }
+  <category>
+    <pattern>ПРИВЕТ *</pattern>
+    <template>Привет! Могу рассказать про погоду и курс валют. Что интересует?</template>
+  </category>
+  <category>
+    <pattern>ЗДРАВСТВУЙ *</pattern>
+    <template>Привет! Могу рассказать про погоду и курс валют. Что интересует?</template>
+  </category>
+  <category>
+    <pattern>ЗДРАВСТВУЙТЕ *</pattern>
+    <template>Привет! Могу рассказать про погоду и курс валют. Что интересует?</template>
+  </category>
+  <category>
+    <pattern>ДОБРЫЙ ДЕНЬ *</pattern>
+    <template>Здравствуйте! Могу подсказать погоду и курс валют. Что нужно?</template>
+  </category>
+  <category>
+    <pattern>HELLO *</pattern>
+    <template>Hello! I can help with weather and currency rates. Write: weather or currency.</template>
+  </category>
 
-    # =========================
-    # WEATHER
-    # =========================
-    state: /weather {
-        q: /weather -> { a: "Погоду для какого города подсказать? (например: Рига)" }
+  <!-- ===================== -->
+  <!-- /weather -->
+  <!-- ===================== -->
+  <category>
+    <pattern>/WEATHER</pattern>
+    <template>Погоду для какого города подсказать? Например: Рига.</template>
+  </category>
 
-        # разные формулировки
-        q: "(?i).*\\b(погода|прогноз|температур(а|у)|дожд(ь|и)|снег|ветер|градус(ы|ов)|что\\s+там\\s+на\\s+улице)\\b.*" -> {
-            a: "Погоду для какого города подсказать? (например: Рига)"
-        }
+  <category>
+    <pattern>ПОГОДА *</pattern>
+    <template>Погоду для какого города подсказать? Например: Рига.</template>
+  </category>
+  <category>
+    <pattern>ПРОГНОЗ *</pattern>
+    <template>Погоду для какого города подсказать? Например: Рига.</template>
+  </category>
+  <category>
+    <pattern>ТЕМПЕРАТУРА *</pattern>
+    <template>Погоду для какого города подсказать? Например: Рига.</template>
+  </category>
+  <category>
+    <pattern>ДОЖДЬ *</pattern>
+    <template>Погоду для какого города подсказать? Например: Рига.</template>
+  </category>
+  <category>
+    <pattern>СНЕГ *</pattern>
+    <template>Погоду для какого города подсказать? Например: Рига.</template>
+  </category>
 
-        # если пользователь сразу пишет город
-        q: "(?i)^(?:погода|прогноз)\\s+(?:в|во|на)\\s+([\\p{L}\\- ]{2,})\\s*$" -> {
-            a: "Я понял запрос про погоду. Уточню: вы хотите прогноз для города $1?"
-        }
-    }
+  <!-- ===================== -->
+  <!-- /currency -->
+  <!-- ===================== -->
+  <category>
+    <pattern>/CURRENCY</pattern>
+    <template>Какую валюту показать? Например: USD или EUR. Можно написать: курс доллара.</template>
+  </category>
 
-    # =========================
-    # CURRENCY
-    # =========================
-    state: /currency {
-        q: /currency -> {
-            a: "Какую валюту показать? Например: USD, EUR. Можно написать: курс доллара или курс евро."
-        }
+  <category>
+    <pattern>КУРС *</pattern>
+    <template>Про какую валюту? USD или EUR?</template>
+  </category>
+  <category>
+    <pattern>ВАЛЮТА *</pattern>
+    <template>Про какую валюту? USD или EUR?</template>
+  </category>
+  <category>
+    <pattern>ДОЛЛАР *</pattern>
+    <template>Понял. Курс USD интересует. Уточните: к RUB или к EUR?</template>
+  </category>
+  <category>
+    <pattern>USD *</pattern>
+    <template>Понял. Курс USD интересует. Уточните: к RUB или к EUR?</template>
+  </category>
+  <category>
+    <pattern>ЕВРО *</pattern>
+    <template>Понял. Курс EUR интересует. Уточните: к RUB или к USD?</template>
+  </category>
+  <category>
+    <pattern>EUR *</pattern>
+    <template>Понял. Курс EUR интересует. Уточните: к RUB или к USD?</template>
+  </category>
 
-        # разные формулировки
-        q: "(?i).*\\b(курс|валют(а|ы)|обмен|exchange|rate)\\b.*" -> {
-            a: "Какую валюту показать? Например: USD или EUR."
-        }
+  <!-- ===================== -->
+  <!-- /NoMatch (fallback) -->
+  <!-- ===================== -->
+  <category>
+    <pattern>*</pattern>
+    <template>Я могу помочь с погодой и курсом валют. Напишите: погода или курс валют. Также можно /hello.</template>
+  </category>
 
-        # конкретика
-        q: "(?i).*\\b(доллар(а|ов)?|usd)\\b.*" -> { a: "Курс USD зависит от источника. Скажите, к какой валюте показать: к RUB или к EUR?" }
-        q: "(?i).*\\b(евро|eur)\\b.*" -> { a: "Курс EUR зависит от источника. Скажите, к какой валюте показать: к RUB или к USD?" }
-    }
-
-    # =========================
-    # ROOT / ROUTING
-    # =========================
-    state: / {
-        q: /start -> { go: /hello }
-        q: /hello -> { go: /hello }
-        q: /weather -> { go: /weather }
-        q: /currency -> { go: /currency }
-
-        # маршрутизация по словам (чтобы ловить не-слеш команды)
-        q: "(?i).*\\b(привет|здравствуй|здравствуйте|добрый\\s*(день|вечер|утро)|hello|hi)\\b.*" -> { go: /hello }
-        q: "(?i).*\\b(погода|прогноз|температур(а|у)|дожд(ь|и)|снег|ветер)\\b.*" -> { go: /weather }
-        q: "(?i).*\\b(курс|валют(а|ы)|обмен|usd|eur|доллар|евро)\\b.*" -> { go: /currency }
-
-        q: * -> { go: /NoMatch }
-    }
-}
+</aiml>
